@@ -24,17 +24,59 @@ export default {
           name: 'komoditas',
           required: true,
           label: 'Komoditas',
-          align: 'center',
+          align: 'left',
           field: 'komoditas',
           format: value => value === null ? 'Belum Diisi' : value,
           sortable: true
         },
-        { name: 'area_provinsi', align: 'center', label: 'Provinsi', field: 'area_provinsi', sortable: true },
-        { name: 'area_kota', align: 'center', label: 'Kota', field: 'area_kota', sortable: true },
-        { name: 'size', align: 'center', label: 'Size', field: 'size', sortable: true },
-        { name: 'price', align: 'center', label: 'Price', field: 'price', sortable: true },
-        { name: 'tgl_parsed', align: 'center', label: 'Parsed', field: 'tgl_parsed', sortable: true },
-        { name: 'timestamp', align: 'center', label: 'Timestamp', field: 'timestamp', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+        {
+          name: 'area_provinsi',
+          align: 'left',
+          label: 'Provinsi',
+          field: 'area_provinsi',
+          format: value => value === null ? 'Belum Diisi' : value,
+          sortable: true
+        },
+        {
+          name: 'area_kota',
+          align: 'left',
+          label: 'Kota',
+          field: 'area_kota',
+          format: value => value === null ? 'Belum Diisi' : value,
+          sortable: true
+        },
+        {
+          name: 'size',
+          align: 'left',
+          label: 'Size',
+          field: 'size',
+          format: value => value === null ? 'Belum Diisi' : value,
+          sortable: true
+        },
+        {
+          name: 'price',
+          align: 'left',
+          label: 'Price',
+          field: 'price',
+          format: value => value === null ? 'Belum Diisi' : value,
+          sortable: true
+        },
+        {
+          name: 'tgl_parsed',
+          align: 'left',
+          label: 'Parsed',
+          field: 'tgl_parsed',
+          format: value => value === null ? 'Belum Diisi' : value,
+          sortable: true
+        },
+        {
+          name: 'timestamp',
+          align: 'left',
+          label: 'Timestamp',
+          field: 'timestamp',
+          format: value => value === null ? 'Belum Diisi' : value,
+          sortable: true
+        }
       ]
     }
   },
