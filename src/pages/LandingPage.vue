@@ -1,11 +1,22 @@
 <template>
   <q-page class="flex flex-center">
     <q-table
-      title="Treats"
       :data="fish"
       :columns="columns"
       row-key="name"
-    />
+    >
+      <template v-slot:top>
+        <q-btn color="primary" label="Tambah Ikan" @click="addFish" />
+        <!-- <q-btn color="primary" :disable="loading" label="Add row" @click="addRow" />
+        <q-btn class="q-ml-sm" color="primary" :disable="loading" label="Remove row" @click="removeRow" />
+        <q-space />
+        <q-input borderless dense debounce="300" color="primary" v-model="filter">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input> -->
+      </template>
+    </q-table>
   </q-page>
 </template>
 
@@ -87,8 +98,20 @@ export default {
   },
   methods: {
     ...mapActions({
-      getListFish: 'landingPage/getListFish'
-    })
+      getListFish: 'landingPage/getListFish',
+      postFish: 'landingPage/postFish'
+    }),
+    addFish () {
+      this.postFish({
+        komoditas: 'hello',
+        area_provinsi: 'test',
+        area_kota: 'efishery',
+        size: 'rothem',
+        price: 'uhuy',
+        tgl_parsed: 'yeahh'
+      })
+        .then(res => alert(res.updatedRange))
+    }
   }
 }
 </script>
