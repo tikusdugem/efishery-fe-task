@@ -16,6 +16,7 @@
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
     "stein-js-client": "0.0.2",
+    "v-money": "^0.8.1",
     "vue-i18n": "^8.0.0"
   },
   "devDependencies": {

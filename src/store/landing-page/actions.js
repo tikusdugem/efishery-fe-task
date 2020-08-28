@@ -54,3 +54,46 @@ export async function updateFish ({ commit }, payload) {
     console.error(err)
   }
 }
+
+export async function getListArea ({ commit }) {
+  try {
+    const area = await store.read('option_area')
+    const province = []
+    const city = []
+
+    // Manipulate data before caching
+    area.forEach(element => {
+      province.push(element.province)
+      city.push(element.city)
+    })
+
+    commit('setListProvince', province)
+    commit('setListCity', city)
+
+    return new Promise((resolve) => {
+      resolve()
+    })
+  } catch (err) {
+    console.error(err) // or do somethin when error e.g Notification
+  }
+}
+
+export async function getListSize ({ commit }) {
+  try {
+    const listSize = await store.read('option_size')
+    const size = []
+
+    // Manipulate data before caching
+    listSize.forEach(element => {
+      size.push(element.size)
+    })
+
+    commit('setListSize', size)
+
+    return new Promise((resolve) => {
+      resolve()
+    })
+  } catch (err) {
+    console.error(err) // or do somethin when error e.g Notification
+  }
+}

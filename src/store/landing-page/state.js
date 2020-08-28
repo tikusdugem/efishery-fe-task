@@ -1,5 +1,8 @@
 export default function () {
   return {
-    fish: []
+    fish: [],
+    province: [],
+    city: [],
+    size: []
   }
 }
