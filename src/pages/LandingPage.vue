@@ -3,7 +3,7 @@
     <q-table
       :data="fish"
       :columns="columns"
-      row-key="name"
+      row-key="uuid"
     >
       <template v-slot:top>
         <q-btn color="primary" label="Tambah Ikan" @click="addFish" />
@@ -19,8 +19,8 @@
 
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
-          <!-- <q-btn color="secondary" label="Edit Ikan" @click="editFish" /> -->
-          <q-btn color="alert" label="Delete Ikan" @click="delFish" />
+          <q-btn color="secondary" label="Edit Ikan" @click="editFish" />
+          <q-btn color="negative" label="Delete Ikan" @click="delFish" />
           <!-- <div>
             <q-badge color="purple" :label="props.value" />
           </div>
@@ -50,7 +50,7 @@ export default {
           label: 'Komoditas',
           align: 'left',
           field: 'komoditas',
-          format: value => value === null ? 'Belum Diisi' : value,
+          format: value => value === null ? '-' : value,
           sortable: true
         },
         {
@@ -58,7 +58,7 @@ export default {
           align: 'left',
           label: 'Provinsi',
           field: 'area_provinsi',
-          format: value => value === null ? 'Belum Diisi' : value,
+          format: value => value === null ? '-' : value,
           sortable: true
         },
         {
@@ -66,7 +66,7 @@ export default {
           align: 'left',
           label: 'Kota',
           field: 'area_kota',
-          format: value => value === null ? 'Belum Diisi' : value,
+          format: value => value === null ? '-' : value,
           sortable: true
         },
         {
@@ -74,7 +74,7 @@ export default {
           align: 'left',
           label: 'Size',
           field: 'size',
-          format: value => value === null ? 'Belum Diisi' : value,
+          format: value => value === null ? '-' : value,
           sortable: true
         },
         {
@@ -82,7 +82,7 @@ export default {
           align: 'left',
           label: 'Price',
           field: 'price',
-          format: value => value === null ? 'Belum Diisi' : value,
+          format: value => value === null ? '-' : value,
           sortable: true
         },
         {
@@ -90,15 +90,7 @@ export default {
           align: 'left',
           label: 'Parsed',
           field: 'tgl_parsed',
-          format: value => value === null ? 'Belum Diisi' : value,
-          sortable: true
-        },
-        {
-          name: 'timestamp',
-          align: 'left',
-          label: 'Timestamp',
-          field: 'timestamp',
-          format: value => value === null ? 'Belum Diisi' : value,
+          format: value => value === null ? '-' : value,
           sortable: true
         },
         {
@@ -118,16 +110,17 @@ export default {
     ...mapActions({
       getListFish: 'landingPage/getListFish',
       postFish: 'landingPage/postFish',
-      deleteFish: 'landingPage/deleteFish'
+      deleteFish: 'landingPage/deleteFish',
+      updateFish: 'landingPage/updateFish'
     }),
     addFish () {
       this.postFish({
-        komoditas: 'hello',
-        area_provinsi: 'test',
-        area_kota: 'efishery',
-        size: 'rothem',
-        price: 'uhuy',
-        tgl_parsed: 'yeahh'
+        komoditas: 'zzzzz',
+        area_provinsi: 'm',
+        area_kota: 'z',
+        size: 2,
+        price: 231,
+        tgl_parsed: 21321321
       })
         .then(res => alert(res.updatedRange))
     },
@@ -136,6 +129,19 @@ export default {
         size: 'rothem'
       })
         .then(res => alert(res.clearedRowsCount))
+    },
+    editFish () {
+      this.updateFish([
+        // Edit by column
+        {
+          size: 'z'
+        },
+        // Set data
+        {
+          area_provinsi: 'jakarta'
+        }
+      ])
+        .then(res => alert(res.totalUpdatedRows))
     }
   }
 }

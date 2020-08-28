@@ -39,3 +39,18 @@ export async function deleteFish ({ commit }, payload) {
     console.error(err)
   }
 }
+
+export async function updateFish ({ commit }, payload) {
+  try {
+    const res = await store.edit('list', {
+      search: payload[0],
+      set: payload[1]
+    })
+
+    return new Promise((resolve) => {
+      resolve(res)
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}
