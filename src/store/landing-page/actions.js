@@ -25,3 +25,17 @@ export async function postFish ({ commit }, payload) {
     console.error(err)
   }
 }
+
+export async function deleteFish ({ commit }, payload) {
+  try {
+    const res = await store.delete('list', {
+      search: payload
+    })
+
+    return new Promise((resolve) => {
+      resolve(res)
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}

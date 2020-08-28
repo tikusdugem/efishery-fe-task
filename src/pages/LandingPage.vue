@@ -16,6 +16,19 @@
           </template>
         </q-input> -->
       </template>
+
+      <template v-slot:body-cell-actions="props">
+        <q-td :props="props">
+          <!-- <q-btn color="secondary" label="Edit Ikan" @click="editFish" /> -->
+          <q-btn color="alert" label="Delete Ikan" @click="delFish" />
+          <!-- <div>
+            <q-badge color="purple" :label="props.value" />
+          </div>
+          <div class="my-table-details">
+            {{ props.row.details }}
+          </div> -->
+        </q-td>
+      </template>
     </q-table>
   </q-page>
 </template>
@@ -87,6 +100,11 @@ export default {
           field: 'timestamp',
           format: value => value === null ? 'Belum Diisi' : value,
           sortable: true
+        },
+        {
+          name: 'actions',
+          align: 'center',
+          label: 'Actions'
         }
       ]
     }
@@ -99,7 +117,8 @@ export default {
   methods: {
     ...mapActions({
       getListFish: 'landingPage/getListFish',
-      postFish: 'landingPage/postFish'
+      postFish: 'landingPage/postFish',
+      deleteFish: 'landingPage/deleteFish'
     }),
     addFish () {
       this.postFish({
@@ -111,6 +130,12 @@ export default {
         tgl_parsed: 'yeahh'
       })
         .then(res => alert(res.updatedRange))
+    },
+    delFish () {
+      this.deleteFish({
+        size: 'rothem'
+      })
+        .then(res => alert(res.clearedRowsCount))
     }
   }
 }
