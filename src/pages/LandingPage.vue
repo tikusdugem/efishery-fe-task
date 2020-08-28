@@ -4,8 +4,15 @@
       :data="fish"
       :columns="columns"
       row-key="uuid"
+      :filter="filter"
     >
       <template v-slot:top>
+        <q-space />
+        <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
         <q-btn color="primary" label="Tambah Ikan" @click="addFish" />
         <!-- <q-btn color="primary" :disable="loading" label="Add row" @click="addRow" />
         <q-btn class="q-ml-sm" color="primary" :disable="loading" label="Remove row" @click="removeRow" />
@@ -98,7 +105,8 @@ export default {
           align: 'center',
           label: 'Actions'
         }
-      ]
+      ],
+      filter: ''
     }
   },
   computed: {
