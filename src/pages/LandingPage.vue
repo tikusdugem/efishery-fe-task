@@ -7,19 +7,20 @@
       :filter="filter"
     >
       <template v-slot:top>
+        <div class="text-h6">List of Fish</div>
         <q-space />
-        <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+        <q-input class="q-pr-md" outlined dense debounce="300" v-model="filter" placeholder="Search">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
         </q-input>
-        <q-btn color="primary" label="Tambah Ikan" @click="addFish" />
+        <q-btn color="primary" label="Add Fish" @click="addFish" />
       </template>
 
       <template v-slot:body-cell-actions="props">
-        <q-td :props="props">
-          <q-btn color="secondary" label="Edit Ikan" @click="editFish" />
-          <q-btn color="negative" label="Delete Ikan" @click="delFish" />
+        <q-td class="q-gutter-xs" :props="props">
+          <q-btn no-caps color="secondary" label="Edit" @click="editFish" />
+          <q-btn no-caps color="negative" label="Delete" @click="delFish" />
         </q-td>
       </template>
     </q-table>
@@ -143,7 +144,18 @@ export default {
           align: 'left',
           label: 'Price',
           field: 'price',
-          format: value => value === null ? '-' : value,
+          format: value => {
+            if (value === null) {
+              return '-'
+            } else {
+              return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+              })
+                .format(value)
+            }
+          },
           sortable: true
         },
         {
@@ -151,7 +163,13 @@ export default {
           align: 'left',
           label: 'Parsed',
           field: 'tgl_parsed',
-          format: value => value === null ? '-' : value,
+          format: value => {
+            if (value === null) {
+              return '-'
+            } else {
+              return date.formatDate(value, 'YYYY/MM/DD')
+            }
+          },
           sortable: true
         },
         {
