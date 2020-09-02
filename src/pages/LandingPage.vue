@@ -19,8 +19,8 @@
 
       <template v-slot:body-cell-actions="props">
         <q-td class="q-gutter-xs" :props="props">
-          <q-btn no-caps color="secondary" label="Edit" @click="editFish" />
-          <q-btn no-caps color="negative" label="Delete" @click="delFish" />
+          <q-btn no-caps size="sm" color="secondary" label="Edit" @click="editFish" />
+          <q-btn no-caps size="sm" color="negative" label="Delete" @click="openConfirmDelete(props)" />
         </q-td>
       </template>
     </q-table>
@@ -86,6 +86,40 @@
             flat
             label="Wokeee"
             @click="submitFish"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog
+      v-model="isDialogDelete"
+      persistent
+      transition-show="scale"
+      transition-hide="scale"
+    >
+      <q-card style="width: 300px">
+
+        <q-card-section>
+          Apakah anda yakin ingin menghapus
+          <strong>{{ tempDataDelete.komoditas }}</strong> data?
+        </q-card-section>
+
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn
+            no-caps
+            outline
+            :disable="isBtnConfirmDialog"
+            label="Cancel Hapus"
+            @click="closeConfirmDelete"
+          />
+          <q-btn
+            no-caps
+            outline
+            color="negative"
+            :disable="isBtnConfirmDialog"
+            :loading="isBtnConfirmDialog"
+            label="Iyaa Hapus"
+            @click="submitDeleteFish"
           />
         </q-card-actions>
       </q-card>
@@ -180,8 +214,11 @@ export default {
       ],
       filter: '',
 
+      tempDataDelete: {},
+
       isDialog: false,
       isConfirmDialog: false,
+      isDialogDelete: false,
       isBtnConfirmDialog: false,
       isFormAreaLoading: false,
       isFormSizeLoading: false,
@@ -277,11 +314,44 @@ export default {
           this.getListFish()
         })
     },
-    delFish () {
+    openConfirmDelete ({ row }) {
+      this.tempDataDelete = row
+      this.isDialogDelete = true
+    },
+    closeConfirmDelete () {
+      this.isDialogDelete = false
+      this.tempDataDelete = {}
+    },
+    submitDeleteFish () {
+      this.isBtnConfirmDialog = true
+
       this.deleteFish({
-        size: 'rothem'
+        uuid: this.tempDataDelete.uuid
       })
-        .then(res => alert(res.clearedRowsCount))
+        .then(res => {
+          this.isDialogDelete = false
+          this.isBtnConfirmDialog = false
+          this.tempDataDelete = {}
+
+          this.getListFish()
+
+          this.$q.notify({
+            message: res.clearedRowsCount,
+            color: 'primary',
+            position: 'center'
+          })
+        })
+        .catch(() => {
+          this.isDialogDelete = false
+          this.isBtnConfirmDialog = false
+          this.tempDataDelete = {}
+
+          this.$q.notify({
+            message: 'Anda gagal menghapus',
+            color: 'negative',
+            position: 'center'
+          })
+        })
     },
     editFish () {
       this.updateFish([
