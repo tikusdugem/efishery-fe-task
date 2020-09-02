@@ -24,6 +24,13 @@
 
 ## Development
 
+- Create `.dev.env` file (init)
+  ```
+  nano .dev.env
+
+  # Then add
+  API_URL={STEIN_API}
+  ```
 - Developing for PWA
   ```
   npm run dev:pwa
@@ -31,6 +38,13 @@
 
 ## Production
 
+- Create `.prod.env` file (init)
+  ```
+  nano .prod.env
+
+  # Then add
+  API_URL={STEIN_API}
+  ```
 - Builds for PWA
   ```
   quasar build -m pwa
