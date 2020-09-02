@@ -19,7 +19,7 @@
 
       <template v-slot:body-cell-actions="props">
         <q-td class="q-gutter-xs" :props="props">
-          <q-btn no-caps size="sm" color="secondary" label="Edit" @click="editFish" />
+          <q-btn no-caps size="sm" color="secondary" label="Edit" @click="editFish(props)" />
           <q-btn no-caps size="sm" color="negative" label="Delete" @click="openConfirmDelete(props)" />
         </q-td>
       </template>
@@ -44,7 +44,7 @@
             <q-skeleton v-if="isFormSizeLoading" type="QInput" />
             <q-select v-else outlined v-model="form.size" :options="size" label="Ukuran" />
 
-            <q-input prefix="Rp. " outlined v-model.lazy="form.price" v-money="money" label="Harga" />
+            <q-input ref="price" prefix="Rp. " outlined v-model.lazy="form.price" v-money="money" label="Harga" />
 
             <q-input outlined v-model="form.tgl_parsed" mask="date" :rules="['date']">
               <template v-slot:append>
@@ -65,25 +65,32 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="warning" label="Cancel" @click="resetForm" />
-          <q-btn flat color="primary" label="Submit" @click="isConfirmDialog = true"/>
+          <q-btn outline class="bg-white text-teal" label="Cancel" @click="resetForm" v-close-popup />
+          <q-btn
+            outline
+            color="primary"
+            label="Submit"
+            @click="typeDialog === 'add' ? isConfirmDialog = true : isDialogEdit = true"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
     <q-dialog v-model="isConfirmDialog" persistent transition-show="scale" transition-hide="scale">
-      <q-card class="bg-teal text-white" style="width: 300px">
+      <q-card style="width: 300px">
 
         <q-card-section>
-          Apakah anda yakin untuk menambahkan harga ikan?
+          Apakah anda yakin ingin menambahkan ikan?
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-teal">
-          <q-btn :disable="isBtnConfirmDialog" flat label="Cancel" v-close-popup />
+          <q-btn no-caps :disable="isBtnConfirmDialog" outline label="Cancel" v-close-popup />
           <q-btn
+            no-caps
+            color="primary"
             :disable="isBtnConfirmDialog"
             :loading="isBtnConfirmDialog"
-            flat
+            outline
             label="Wokeee"
             @click="submitFish"
           />
@@ -120,6 +127,40 @@
             :loading="isBtnConfirmDialog"
             label="Iyaa Hapus"
             @click="submitDeleteFish"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog
+      v-model="isDialogEdit"
+      persistent
+      transition-show="scale"
+      transition-hide="scale"
+    >
+      <q-card style="width: 300px">
+
+        <q-card-section>
+          Apakah anda yakin ingin mengupdate
+          <strong>{{ form.komoditas }}</strong> data?
+        </q-card-section>
+
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn
+            no-caps
+            :disable="isBtnConfirmDialog"
+            outline
+            label="Cancel"
+            v-close-popup
+          />
+          <q-btn
+            no-caps
+            color="primary"
+            :disable="isBtnConfirmDialog"
+            :loading="isBtnConfirmDialog"
+            outline
+            label="Wokeee"
+            @click="submitEditFish"
           />
         </q-card-actions>
       </q-card>
@@ -187,7 +228,7 @@ export default {
                 currency: 'IDR',
                 minimumFractionDigits: 0
               })
-                .format(value)
+                .format(value.split('.').join(''))
             }
           },
           sortable: true
@@ -215,10 +256,12 @@ export default {
       filter: '',
 
       tempDataDelete: {},
+      typeDialog: '',
 
       isDialog: false,
       isConfirmDialog: false,
       isDialogDelete: false,
+      isDialogEdit: false,
       isBtnConfirmDialog: false,
       isFormAreaLoading: false,
       isFormSizeLoading: false,
@@ -268,8 +311,12 @@ export default {
         price: null,
         tgl_parsed: date.formatDate(new Date(), 'YYYY/MM/DD')
       }
+
+      // Fix bug for v-money
+      this.$refs.price.$el.getElementsByTagName('input')[0].value = null
     },
     addFish () {
+      this.typeDialog = 'add'
       this.isDialog = true
 
       if (this.province.length === 0 || this.city.length === 0) {
@@ -353,18 +400,57 @@ export default {
           })
         })
     },
-    editFish () {
+    editFish ({ row }) {
+      this.typeDialog = 'edit'
+      this.isDialog = true
+
+      this.form = {
+        uuid: row.uuid,
+        komoditas: row.komoditas,
+        area_provinsi: row.area_provinsi,
+        area_kota: row.area_kota,
+        size: row.size,
+        price: row.price,
+        tgl_parsed: date.formatDate(row.tgl_parsed, 'YYYY/MM/DD')
+      }
+
+      this.getListArea()
+      this.getListSize()
+    },
+    submitEditFish () {
+      this.isBtnConfirmDialog = true
+
       this.updateFish([
-        // Edit by column
+        // Edit by uuid
         {
-          size: 'z'
+          uuid: this.form.uuid
         },
         // Set data
         {
-          area_provinsi: 'jakarta'
+          komoditas: this.form.komoditas,
+          area_provinsi: this.form.area_provinsi,
+          area_kota: this.form.area_kota,
+          size: this.form.size,
+          price: this.form.price,
+          tgl_parsed: date.formatDate(this.form.tgl_parsed, 'YYYY/MM/DD')
         }
       ])
-        .then(res => alert(res.totalUpdatedRows))
+        .then(res => {
+          this.isDialogEdit = false
+          this.isDialog = false
+          this.isBtnConfirmDialog = false
+
+          this.getListFish()
+
+          this.$q.notify({
+            message: res.totalUpdatedRows,
+            color: 'primary',
+            position: 'center'
+          })
+        })
+        .catch(err => {
+          alert(err)
+        })
     }
   }
 }
