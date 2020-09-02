@@ -1,26 +1,41 @@
-# eFishery-FE-Test (fe-test)
+# HOW TO PLAY ?!
 
-Test online for eFishery
+- Make sure you already have [Node](https://nodejs.org/en/) >= 10 and [NPM](https://www.npmjs.com/get-npm) >= 5
+- Uninstall quasar-cli if you have it from < 1.0 versions ( skip this if you never have quasar-cli )
+  ```
+  npm uninstall -g quasar-cli
+  ```
+- Install @quasar/cli
+  ```
+  npm install -g @quasar/cli
+  ```
+- Clone this repo
+  ```
+  git clone https://github.com/tikusdugem/efishery-fe-task.git
+  ```
+- Move to the repo directory
+  ```
+  cd efishery-fe-task
+  ```
+- Install dependencies
+  ```
+  npm install
+  ```
 
-## Install the dependencies
-```bash
-npm install
-```
+## Development
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
+- Developing for PWA
+  ```
+  npm run dev:pwa
+  ```
 
-### Lint the files
-```bash
-npm run lint
-```
+## Production
 
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+- Builds for PWA
+  ```
+  quasar build -m pwa
+  ```
+- Start a HTTP(S) server
+  ```
+  quasar serve .
+  ```
