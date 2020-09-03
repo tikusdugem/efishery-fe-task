@@ -1,20 +1,23 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="q-pa-md">
     <q-table
       :data="fish"
       :columns="columns"
       row-key="uuid"
       :filter="filter"
+      :dense="$q.screen.lt.md"
     >
       <template v-slot:top>
         <div class="text-h6">List of Fish</div>
         <q-space />
-        <q-input class="q-pr-md" outlined dense debounce="300" v-model="filter" placeholder="Search">
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-        <q-btn color="primary" label="Add Fish" @click="addFish" />
+        <div class="row q-gutter-xs">
+          <q-input outlined dense debounce="300" v-model="filter" placeholder="Search">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+          <q-btn color="primary" label="Add Fish" @click="addFish" />
+        </div>
       </template>
 
       <template v-slot:body-cell-actions="props">
