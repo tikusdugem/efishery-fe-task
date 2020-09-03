@@ -353,15 +353,28 @@ export default {
 
       this.postFish(this.form)
         .then(res => {
+          this.isConfirmDialog = false
+          this.isDialog = false
+          this.isBtnConfirmDialog = false
+
+          this.getListFish()
+
           this.$q.notify({
             message: res.updatedRange,
             color: 'primary',
             position: 'center'
           })
+        })
+        .catch(() => {
           this.isConfirmDialog = false
           this.isDialog = false
+          this.isBtnConfirmDialog = false
 
-          this.getListFish()
+          this.$q.notify({
+            message: 'Gagal menambahkan ikan',
+            color: 'negative',
+            position: 'center'
+          })
         })
     },
     openConfirmDelete ({ row }) {
